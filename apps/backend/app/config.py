@@ -1,8 +1,8 @@
 from functools import lru_cache
-from typing import List
+from typing import Annotated, List
 
-from pydantic import AnyHttpUrl, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import field_validator
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -32,12 +32,15 @@ class Settings(BaseSettings):
     BOT_INTERNAL_TOKEN: str  # shared secret used by the bot service to call backend
 
     # CORS
-    CORS_ORIGINS: List[str] = ["http://localhost:3000"]
+    # NoDecode: these are plain comma-separated strings in .env (not JSON),
+    # so pydantic-settings must not try to JSON-decode them itself — the
+    # field_validator below does the comma-splitting instead.
+    CORS_ORIGINS: Annotated[List[str], NoDecode] = ["http://localhost:3000"]
 
     # Uploads
     UPLOAD_DIR: str = "/app/storage/uploads"
     MAX_UPLOAD_MB: int = 10
-    ALLOWED_IMAGE_MIME: List[str] = ["image/jpeg", "image/png", "image/webp"]
+    ALLOWED_IMAGE_MIME: Annotated[List[str], NoDecode] = ["image/jpeg", "image/png", "image/webp"]
     PUBLIC_MEDIA_BASE_URL: str = "/media"
 
     # Rate limiting
