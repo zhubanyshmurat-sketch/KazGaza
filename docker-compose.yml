@@ -89,8 +89,10 @@ services:
       - ./docker/nginx/certs:/etc/nginx/certs:ro
       - storage_uploads:/var/www/media:ro
     depends_on:
-      - backend
-      - frontend
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_started
     networks: [kazgaza]
 
 volumes:
