@@ -17,8 +17,8 @@ npm-debug.log*
 .env.*
 !.env.example
 
-# Storage
-storage/uploads/*
+# Storage (root, and any per-service local run dir e.g. apps/backend/storage)
+**/storage/uploads/*
 !storage/uploads/.gitkeep
 
 # OS / editors
