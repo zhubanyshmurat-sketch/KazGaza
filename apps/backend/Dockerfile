@@ -14,7 +14,10 @@ COPY apps/backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY apps/backend .
-RUN chmod +x entrypoint.sh
+# Normalize line endings in case this was checked out on Windows with
+# CRLF (git core.autocrlf) — a \r before the shebang makes the kernel
+# unable to find the interpreter ("no such file or directory").
+RUN sed -i 's/\r$//' entrypoint.sh && chmod +x entrypoint.sh
 
 RUN mkdir -p /app/storage/uploads
 
